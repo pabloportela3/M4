@@ -5,8 +5,12 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-//var usersRouter = require('./routes/users');
 var nosotrosRouter = require('./routes/nosotros')
+var serviciosRouter = require('./routes/servicios')
+var contactoRouter = require('./routes/contacto')
+//var usersRouter = require('./routes/users');
+
+
 var app = express();
 
 // view engine setup
@@ -19,24 +23,33 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/servicios', function(req,res,next){
-  res.send('aca hay servicios')
+
+
+
+
+app.post('/saludo', function (req, res) {
+  var nombre = req.body.nombre ||'';
+  var saludo = '';
+
+  if (nombre != '')
+  saludo = "Hola " + nombre;
+
+  res.send(saludo);
 });
 
-app.get('/contactenos', function(req,res,next){
-  console.log('la respuesta sera enviada por la siguiente funcion...');
-  next();
-}, function (req, res){
-  res.send('Por aca puede contactarnos');
-});
 
-app.get('/imagenes', function(req,res,next){
-  res.send('promiximamente imagenes...')
-});
+
+//app.get('/servicios', function(req,res,next){res.send('aca hay servicios')});
+
+//app.get('/contactenos', function(req,res,next){console.log('la respuesta sera enviada por la siguiente funcion...');next();}, function (req, res){res.send('Por aca puede contactarnos')});
+
+//app.get('/imagenes', function(req,res,next){res.send('promiximamente imagenes...')});
 
 app.use('/', indexRouter);
+app.use('/nosotros', nosotrosRouter);
+app.use('/servicios', serviciosRouter);
+app.use('/contacto', contactoRouter);
 //app.use('/users', usersRouter);
-app.use('/nosotros', nosotrosRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
